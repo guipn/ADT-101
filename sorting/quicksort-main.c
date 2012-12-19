@@ -1,7 +1,8 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <time.h>
 #include <errno.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
 #include "quicksort.h"
 
 static void groan(const char *msg)

@@ -1,5 +1,5 @@
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 static size_t partition(int array[], size_t p, size_t q);
 static void   swap(int *a, int *b);
