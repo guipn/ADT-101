@@ -37,6 +37,17 @@ int main(int argc, char *argv[])
 
     quicksort(test, size);
 
+    printf("\n\tSimple in-place implementation output:\n\n");
+
+    for (long int i = 0; i < size; i++)
+    {
+        printf("%d\n", test[i]);
+    }
+
+    r_quicksort(test, size);
+
+    printf("\n\tRandomized in-place implementation output:\n\n");
+
     for (long int i = 0; i < size; i++)
     {
         printf("%d\n", test[i]);

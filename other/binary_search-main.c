@@ -50,5 +50,5 @@ int main(int argc, char *argv[])
     }
 
     printf("\n\t%d\n\n", binsearch(key, test, size));
-
 }
+
