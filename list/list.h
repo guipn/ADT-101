@@ -19,14 +19,9 @@ list_t *next(list_t *);
 list_t *snoc(list_t *, void *);
 list_t *take(size_t, list_t *);
 list_t *take_while(list_t *head, bool (*predicate)(void *));
+size_t length(list_t *head);
+void *nth(list_t *head, size_t n);
 void destroy(list_t *);
 void for_each(list_t *head, void (*f)(void *));
 void print_ints(list_t *);
 
-/* Todo:
- *
- * map
- * nth
- * drop_while?
- * take_while?
- */

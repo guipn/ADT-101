@@ -2,19 +2,29 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+static int as_int (void *promise)
+{
+    return *((int *) promise);
+}
+
 void print(void *int_val)
 {
-    printf("%d ", *((int *) int_val));
+    printf("%d ", as_int(int_val));
+}
+
+int squared(void *int_val)
+{
+    return as_int(int_val) * as_int(int_val);
 }
 
 bool less_than_4(void *int_val)
 {
-    return *((int *) int_val) < 4;
+    return as_int(int_val) < 4;
 }
 
 bool greater_than_3(void *int_val)
 {
-    return *((int *) int_val) > 3;
+    return as_int(int_val) > 3;
 }
 
 int main(void)

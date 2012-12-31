@@ -7,6 +7,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "list.h"
 
@@ -175,6 +176,30 @@ void for_each(list_t *head, void (*f)(void *))
     }
 }
 
+void *nth(list_t *head, size_t n)
+{
+    while (n && !is_empty(head))
+    {
+        head = next(head);
+        n--;
+    }
+
+    return head;
+}
+
+size_t length(list_t *head)
+{
+    size_t len = 0;
+
+    while (!is_empty(head))
+    {
+        head = next(head);
+        len++;
+    }
+
+    return len;
+}
+
 void print_ints(list_t *head)
 {
     if (is_empty(head))
@@ -194,3 +219,4 @@ void print_ints(list_t *head)
         printf("%d)\n", *((int *) head->value));
     }
 }
+
