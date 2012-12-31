@@ -30,6 +30,10 @@ list_t *next(list_t *head)
             head->tail;
 }
 
+void *value(list_t *head)
+{
+    return is_empty(head) ? NULL : head->value;
+}
 
 list_t *cons(void *value, list_t *tail)
 {
@@ -76,18 +80,42 @@ list_t *take(size_t n, list_t *head)
         n--;
     }
 
-    destroy(last_taken->tail);
-    last_taken->tail = empty();
+    destroy(next(last_taken));
+
+    if (!is_empty(last_taken))
+    {
+        last_taken->tail = empty();
+    }
 
     return taken;
 }
 
+list_t *take_while(list_t *head, bool (*predicate)(void *))
+{
+    list_t *taken      = head,
+           *last_taken = empty();
+
+    while (!is_empty(head) && predicate(value(head)))
+    {
+        last_taken = head;
+        head = next(head);
+    }
+
+    destroy(next(last_taken));
+
+    if (!is_empty(last_taken))
+    {
+        last_taken->tail = empty();
+    }
+
+    return taken;
+}
 
 list_t *drop(list_t *head, size_t n)
 {
     list_t *dropped = head;
 
-    while (n && !is_empty(next(dropped)))
+    while (n && !is_empty(dropped))
     {
         list_t *tmp = dropped;
         dropped     = next(dropped);
@@ -96,6 +124,20 @@ list_t *drop(list_t *head, size_t n)
     }
 
     return n ? empty() : dropped;
+}
+
+list_t *drop_while(list_t *head, bool (*predicate)(void *))
+{
+    list_t *dropped = head;
+
+    while (!is_empty(dropped) && predicate(value(dropped)))
+    {
+        list_t *tmp = dropped;
+        dropped     = next(dropped);
+        free(tmp);
+    }
+
+    return is_empty(dropped) ? empty() : dropped;
 }
 
 
@@ -124,6 +166,14 @@ list_t *snoc(list_t *head, void *value)
     return append(head, value);
 }
 
+void for_each(list_t *head, void (*f)(void *))
+{
+    while(!is_empty(head))
+    {
+        f(value(head));
+        head = next(head);
+    }
+}
 
 void print_ints(list_t *head)
 {
