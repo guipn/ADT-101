@@ -1,27 +1,33 @@
+/*
+ * Singly-linked list implementation.
+ *
+ * Given its simplicity, some degree of genericity will be kept.
+ */
+
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 #include "list.h"
 
+
 list_t *empty(void)
 {
     return NULL;
 }
+
 
 bool is_empty(list_t *head)
 {
     return head == empty();
 }
 
+
 list_t *next(list_t *head)
 {
-    if (is_empty(head))
-    {
-        perror(__func__);
-    }
-
-    return head->tail;
+    return is_empty(head) ? 
+            empty() :
+            head->tail;
 }
 
 
@@ -43,17 +49,19 @@ list_t *cons(void *value, list_t *tail)
 
 void destroy(list_t *head)
 {
-    for (list_t *cur = empty(); !is_empty(head); head = next(head))
+    if (is_empty(head))
     {
-        cur = head;
-        free(cur);
+        return;
     }
+
+    destroy(next(head));
+    free(head);
 }
 
 
 list_t *take(size_t n, list_t *head)
 {
-    if (is_empty(head) || n == 0)
+    if (is_empty(head) || !n)
     {
         return empty();
     }
@@ -61,7 +69,7 @@ list_t *take(size_t n, list_t *head)
     list_t *taken      = head,
            *last_taken = empty();
 
-    while (n > 0 && !is_empty(head))
+    while (n && !is_empty(head))
     {
         last_taken = head;
         head = next(head);
@@ -79,7 +87,7 @@ list_t *drop(list_t *head, size_t n)
 {
     list_t *dropped = head;
 
-    while (n > 0 && !is_empty(next(dropped)))
+    while (n && !is_empty(next(dropped)))
     {
         list_t *tmp = dropped;
         dropped     = next(dropped);
@@ -87,7 +95,33 @@ list_t *drop(list_t *head, size_t n)
         n--;
     }
 
-    return (n > 0) ? empty() : dropped;
+    return n ? empty() : dropped;
+}
+
+
+list_t *concat(list_t *head, list_t *tail)
+{
+    list_t *iter = head;
+
+    while (!is_empty(next(iter))) 
+    {
+        iter = next(iter);
+    }
+
+    iter->tail = tail;
+
+    return head;
+}
+
+
+list_t *append(list_t *head, void *value)
+{
+    return concat(head, cons(value, empty()));
+}
+
+list_t *snoc(list_t *head, void *value)
+{
+    return append(head, value);
 }
 
 
