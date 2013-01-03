@@ -200,6 +200,37 @@ size_t length(list_t *head)
     return len;
 }
 
+list_t *delete(void *val, list_t *head, bool (*compare)(void *, void *))
+{
+    if (is_empty(head))
+    {
+        return empty();
+    }
+
+    if (compare(val, value(head)))
+    {
+        list_t *nxt = next(head);
+        free(head);
+        return nxt;
+    }
+
+    list_t *prior;
+
+    for (list_t *iter = head; !is_empty(iter); iter = next(iter))
+    {
+        if (compare(val, value(iter)))
+        {
+            prior->tail = next(iter); // prior never NULL - head special case above
+            free(iter);
+            return head;
+        }
+
+        prior = iter;
+    }
+
+    return head;
+}
+
 void print_ints(list_t *head)
 {
     if (is_empty(head))
